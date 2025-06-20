@@ -1,7 +1,7 @@
 #!/bin/sh
 
-awk -v beginWithAbs="${begin_with_abs:-1}" '
-NR == 1 && begin_with_abs {
+awk -v BeginWithAbs="${begin_with_abs:-1}" '
+NR == 1 && BeginWithAbs {
    if (substr($1,1,1) != "w") {
       error("Must begin with function definition");
    }
