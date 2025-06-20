@@ -16,7 +16,7 @@ substr($1,1,1) == "W" { parseApp(); next }
 
 END {
    if (!err)
-   print "main = f" last_fn " f" lastfn;
+   print "main = f" last_fn " f" last_fn;
 }
 
 function parseFn() {
@@ -52,6 +52,7 @@ function tryGetFn2(n) {
 function parseApp() {
   for (i = 1; i<=NF; ) {
       s = "f" ++last_fn;
+   s = s OFS "=";
       s = s OFS tryGetFn1($(i++));
       s = s OFS tryGetFn1($(i++));
       print s;
