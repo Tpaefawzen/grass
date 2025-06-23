@@ -1,20 +1,33 @@
 #!/bin/sh
 
 # pub
-awk 'BEGIN {
+awk -v file="${1:?}" '
+BEGIN {
    globls = split("read 119 next out", globl);
-}
 
-/^w/ {
-   for (i=2; i<=NF; i++) $i = -length($i);
-   globl[++globls] = $0;
-   next
-}
+   while ((getline <file) > 0) {
+      if (/^w/) {
+	 for (i=2; i<=NF; i++)
+	    $i = -length($i);
+	 globl[++globls] = $0;
+      } else if (/^W/) {
+	 for (i=1; i<=NF; i++)
+	    globl[++globls] = (-length($i)) OFS (-length($(++i)));
+      } else {
+	 Unreachable();
+      }
+   }
 
-/^W/ {
-   for (i=1; i<=NF; i++) globls[++globls] = (-length($i)) OFS (-length($(i+1)));
-   next
+exit
+
 }
 
 END {
-   for (i in globl) print i,globl[i]                                                    }'
+   for (i in globl) print i, globl[i];
+}
+
+function Unreachable() {
+   print "WTF", NR, $0 | "cat 1>&2"
+   exit 1
+}
+'
