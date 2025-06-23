@@ -16,7 +16,7 @@ substr($1,1,1) == "W" { parseApp(); next }
 
 END {
    if (!err)
-   print "main = f" last_fn " f" last_fn;
+   print "return f" last_fn " f" last_fn;
 }
 
 function parseFn() {
